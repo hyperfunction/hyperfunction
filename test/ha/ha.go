@@ -12,23 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package v1alpha1
+package ha
 
-import (
-	"context"
-
-	"knative.dev/pkg/apis"
+const (
+	// NumControllerReconcilers is the number of controllers run by ./cmd/controller/main.go.
+	// It is exported so the tests from cmd/controller/main.go can ensure we keep it in sync.
+	NumControllerReconcilers = 1
 )
-
-// SetDefaults implements apis.Defaultable
-func (in *Function) SetDefaults(ctx context.Context) {
-	ctx = apis.WithinParent(ctx, in.ObjectMeta)
-	in.Spec.SetDefaults(apis.WithinSpec(ctx))
-}
-
-// SetDefaults implements apis.Defaultable
-func (in *FunctionSpec) SetDefaults(ctx context.Context) {
-	if in.Engine == "" {
-		in.Engine = "knative"
-	}
-}

@@ -25,6 +25,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"knative.dev/pkg/kmeta"
 	"knative.dev/pkg/logging"
+	"knative.dev/pkg/ptr"
 	pkgreconciler "knative.dev/pkg/reconciler"
 	"knative.dev/pkg/tracker"
 
@@ -106,7 +107,7 @@ func (r *Reconciler) reconcileCodeConfigmap(ctx context.Context, f *v1alpha1.Fun
 			},
 		},
 		Data: map[string]string{
-			functionCmKey: *f.Spec.Code.Inline,
+			functionCmKey: ptr.StringValue(f.Spec.Code.Inline),
 		},
 	}
 	expectedCm.SetOwnerReferences([]metav1.OwnerReference{

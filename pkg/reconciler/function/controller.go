@@ -21,6 +21,7 @@ import (
 	"knative.dev/pkg/configmap"
 	"knative.dev/pkg/controller"
 	"knative.dev/pkg/logging"
+	"knative.dev/pkg/tracker"
 
 	functioninformer "github.com/hyperfunction/hyperfunction/pkg/client/injection/informers/core/v1alpha1/function"
 	functionreconciler "github.com/hyperfunction/hyperfunction/pkg/client/injection/reconciler/core/v1alpha1/function"
@@ -33,9 +34,12 @@ func NewController(ctx context.Context, cmw configmap.Watcher) *controller.Impl 
 	functionInformer := functioninformer.Get(ctx)
 
 	r := &Reconciler{
+		Tracker: nil,
+
 		coreClientSet: kubeclient.Get(ctx),
 	}
 	impl := functionreconciler.NewImpl(ctx, r)
+	r.Tracker = tracker.New(impl.EnqueueSlowKey, controller.GetTrackerLease(ctx))
 
 	logger.Info("Setting up event handlers.")
 

@@ -26,6 +26,13 @@ func (in *Function) Validate(ctx context.Context) *apis.FieldError {
 }
 
 // Validate implements apis.Validatable
-func (in *FunctionSpec) Validate(ctx context.Context) *apis.FieldError {
-	return nil
+func (in *FunctionSpec) Validate(ctx context.Context) (errs *apis.FieldError) {
+	return in.Code.Validate(ctx).ViaField("code")
+}
+
+func (in *FunctionCode) Validate(ctx context.Context) (errs *apis.FieldError) {
+	if in.Inline == nil {
+		errs = errs.Also(apis.ErrMissingOneOf("inline"))
+	}
+	return
 }

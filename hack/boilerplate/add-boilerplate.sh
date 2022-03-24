@@ -35,6 +35,8 @@ fi
 
 function grep() {
   local tool=grep
+  # Fix compat with mac
+  # Install homebrew grep package with `brew install grep`
   [[ -n "$(which ggrep)" ]] && tool=ggrep
   $tool "$@"
 }
@@ -42,4 +44,4 @@ function grep() {
 grep -r -L -P "Copyright \d+ The \w+ Authors" $2  \
   | grep -P "\.$1\$" \
   | xargs -I {} sh -c \
-  "cat hack/boilerplate/boilerplate.$1.txt {} > /tmp/boilerplate && cat /tmp/boilerplate > {}"
+  "cat hack/boilerplate/boilerplate.$1.txt > /tmp/boilerplate && echo '\n' >> /tmp/boilerplate && cat {} >> /tmp/boilerplate && cat /tmp/boilerplate > {}"

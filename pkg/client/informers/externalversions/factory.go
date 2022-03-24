@@ -22,7 +22,7 @@ import (
 	time "time"
 
 	versioned "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned"
-	extensions "github.com/hyperfunction/hyperfunction/pkg/client/informers/externalversions/extensions"
+	core "github.com/hyperfunction/hyperfunction/pkg/client/informers/externalversions/core"
 	internalinterfaces "github.com/hyperfunction/hyperfunction/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -170,9 +170,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Serving() extensions.Interface
+	Core() core.Interface
 }
 
-func (f *sharedInformerFactory) Serving() extensions.Interface {
-	return extensions.New(f, f.namespace, f.tweakListOptions)
+func (f *sharedInformerFactory) Core() core.Interface {
+	return core.New(f, f.namespace, f.tweakListOptions)
 }

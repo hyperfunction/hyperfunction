@@ -22,8 +22,8 @@ import (
 	"knative.dev/pkg/controller"
 	"knative.dev/pkg/logging"
 
-	functioninformer "github.com/hyperfunction/hyperfunction/pkg/client/injection/informers/extensions/v1alpha1/function"
-	functionreconciler "github.com/hyperfunction/hyperfunction/pkg/client/injection/reconciler/extensions/v1alpha1/function"
+	functioninformer "github.com/hyperfunction/hyperfunction/pkg/client/injection/informers/core/v1alpha1/function"
+	functionreconciler "github.com/hyperfunction/hyperfunction/pkg/client/injection/reconciler/core/v1alpha1/function"
 )
 
 // NewController creates a Reconciler and returns the result of NewImpl.
@@ -33,7 +33,7 @@ func NewController(ctx context.Context, cmw configmap.Watcher) *controller.Impl 
 	functionInformer := functioninformer.Get(ctx)
 
 	r := &Reconciler{
-		kubeclient: kubeclient.Get(ctx),
+		coreClientSet: kubeclient.Get(ctx),
 	}
 	impl := functionreconciler.NewImpl(ctx, r)
 

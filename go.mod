@@ -3,6 +3,7 @@ module github.com/hyperfunction/hyperfunction
 go 1.17
 
 require (
+	github.com/hashicorp/golang-lru v0.5.4
 	github.com/stretchr/testify v1.7.0
 	go.uber.org/zap v1.19.1
 	k8s.io/api v0.23.4
@@ -43,7 +44,6 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/gnostic v0.5.5 // indirect
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/imdario/mergo v0.3.5 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect

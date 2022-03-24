@@ -12,22 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package v1alpha1
 
 import (
-	"log"
+	"testing"
 
-	"knative.dev/hack/schema/commands"
-	"knative.dev/hack/schema/registry"
-
-	"github.com/hyperfunction/hyperfunction/pkg/apis/core/v1alpha1"
+	"github.com/stretchr/testify/assert"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
-// schema is a tool to dump the schema for Eventing resources.
-func main() {
-	registry.Register(&v1alpha1.Function{})
+func TestRegisterHelpers(t *testing.T) {
+	t.Parallel()
 
-	if err := commands.New("github.com/hyperfunction/hyperfunction").Execute(); err != nil {
-		log.Fatal("Error during command execution: ", err)
-	}
+	assert.Equal(t, "Foo.core.hyperfunction.dev", Kind("Foo").String())
+	assert.Equal(t, "foo.core.hyperfunction.dev", Resource("foo").String())
+	assert.Equal(t, "core.hyperfunction.dev/v1alpha1", SchemeGroupVersion.String())
+
+	scheme := runtime.NewScheme()
+	assert.NoError(t, addKnownTypes(scheme))
 }

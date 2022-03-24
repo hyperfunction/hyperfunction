@@ -18,8 +18,8 @@ package fake
 
 import (
 	clientset "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned"
-	servingv1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/extensions/v1alpha1"
-	fakeservingv1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/extensions/v1alpha1/fake"
+	corev1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/core/v1alpha1"
+	fakecorev1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/core/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -77,7 +77,7 @@ var (
 	_ testing.FakeClient  = &Clientset{}
 )
 
-// ServingV1alpha1 retrieves the ServingV1alpha1Client
-func (c *Clientset) ServingV1alpha1() servingv1alpha1.ServingV1alpha1Interface {
-	return &fakeservingv1alpha1.FakeServingV1alpha1{Fake: &c.Fake}
+// CoreV1alpha1 retrieves the CoreV1alpha1Client
+func (c *Clientset) CoreV1alpha1() corev1alpha1.CoreV1alpha1Interface {
+	return &fakecorev1alpha1.FakeCoreV1alpha1{Fake: &c.Fake}
 }

@@ -6,5 +6,8 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 
 [boilerplate.*.txt]
-trim_trailing_whitespace = true
 insert_final_newline = false
+
+[*.{yaml,yml}]
+indent_style = space
+tab_width = 2

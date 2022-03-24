@@ -37,7 +37,7 @@ group "Kubernetes Codegen"
 #                  instead of the $GOPATH directly. For normal projects this can be dropped.
 ${CODEGEN_PKG}/generate-groups.sh "deepcopy,client,informer,lister" \
   github.com/hyperfunction/hyperfunction/pkg/client github.com/hyperfunction/hyperfunction/pkg/apis \
-  "extensions:v1alpha1" \
+  "core:v1alpha1" \
   --go-header-file "${boilerplate}"
 
 group "Knative Codegen"
@@ -45,7 +45,7 @@ group "Knative Codegen"
 # Knative Injection
 ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
   github.com/hyperfunction/hyperfunction/pkg/client github.com/hyperfunction/hyperfunction/pkg/apis \
-  "extensions:v1alpha1" \
+  "core:v1alpha1" \
   --go-header-file "${boilerplate}"
 
 group "Update deps post-codegen"

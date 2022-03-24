@@ -12,22 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package core
 
-import (
-	"log"
-
-	"knative.dev/hack/schema/commands"
-	"knative.dev/hack/schema/registry"
-
-	"github.com/hyperfunction/hyperfunction/pkg/apis/core/v1alpha1"
+const (
+	// GroupName is the group name of the API group.
+	GroupName = "core.hyperfunction.dev"
 )
-
-// schema is a tool to dump the schema for Eventing resources.
-func main() {
-	registry.Register(&v1alpha1.Function{})
-
-	if err := commands.New("github.com/hyperfunction/hyperfunction").Execute(); err != nil {
-		log.Fatal("Error during command execution: ", err)
-	}
-}

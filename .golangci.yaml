@@ -1,0 +1,26 @@
+run:
+  timeout: 10m
+  skip-dirs:
+    - vendor
+    - pkg/client
+
+linters:
+  enable:
+    - asciicheck
+    - errorlint
+    - gofumpt
+    - gosec
+    - govet
+    - prealloc
+    - revive
+    - staticcheck
+    - stylecheck
+    - unconvert
+
+linters-settings:
+  staticcheck:
+    go: '1.17'
+  stylecheck:
+    checks:
+      - all
+      - -ST1000

@@ -22,9 +22,9 @@ import (
 	errors "errors"
 	fmt "fmt"
 
-	v1alpha1 "github.com/hyperfunction/hyperfunction/pkg/apis/extensions/v1alpha1"
+	v1alpha1 "github.com/hyperfunction/hyperfunction/pkg/apis/core/v1alpha1"
 	versioned "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned"
-	typedservingv1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/extensions/v1alpha1"
+	typedcorev1alpha1 "github.com/hyperfunction/hyperfunction/pkg/client/clientset/versioned/typed/core/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	unstructured "k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -94,25 +94,25 @@ func convert(from interface{}, to runtime.Object) error {
 	return nil
 }
 
-// ServingV1alpha1 retrieves the ServingV1alpha1Client
-func (w *wrapClient) ServingV1alpha1() typedservingv1alpha1.ServingV1alpha1Interface {
-	return &wrapServingV1alpha1{
+// CoreV1alpha1 retrieves the CoreV1alpha1Client
+func (w *wrapClient) CoreV1alpha1() typedcorev1alpha1.CoreV1alpha1Interface {
+	return &wrapCoreV1alpha1{
 		dyn: w.dyn,
 	}
 }
 
-type wrapServingV1alpha1 struct {
+type wrapCoreV1alpha1 struct {
 	dyn dynamic.Interface
 }
 
-func (w *wrapServingV1alpha1) RESTClient() rest.Interface {
+func (w *wrapCoreV1alpha1) RESTClient() rest.Interface {
 	panic("RESTClient called on dynamic client!")
 }
 
-func (w *wrapServingV1alpha1) Functions(namespace string) typedservingv1alpha1.FunctionInterface {
-	return &wrapServingV1alpha1FunctionImpl{
+func (w *wrapCoreV1alpha1) Functions(namespace string) typedcorev1alpha1.FunctionInterface {
+	return &wrapCoreV1alpha1FunctionImpl{
 		dyn: w.dyn.Resource(schema.GroupVersionResource{
-			Group:    "serving.knative.dev",
+			Group:    "core.hyperfunction.dev",
 			Version:  "v1alpha1",
 			Resource: "functions",
 		}),
@@ -121,17 +121,17 @@ func (w *wrapServingV1alpha1) Functions(namespace string) typedservingv1alpha1.F
 	}
 }
 
-type wrapServingV1alpha1FunctionImpl struct {
+type wrapCoreV1alpha1FunctionImpl struct {
 	dyn dynamic.NamespaceableResourceInterface
 
 	namespace string
 }
 
-var _ typedservingv1alpha1.FunctionInterface = (*wrapServingV1alpha1FunctionImpl)(nil)
+var _ typedcorev1alpha1.FunctionInterface = (*wrapCoreV1alpha1FunctionImpl)(nil)
 
-func (w *wrapServingV1alpha1FunctionImpl) Create(ctx context.Context, in *v1alpha1.Function, opts v1.CreateOptions) (*v1alpha1.Function, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) Create(ctx context.Context, in *v1alpha1.Function, opts v1.CreateOptions) (*v1alpha1.Function, error) {
 	in.SetGroupVersionKind(schema.GroupVersionKind{
-		Group:   "serving.knative.dev",
+		Group:   "core.hyperfunction.dev",
 		Version: "v1alpha1",
 		Kind:    "Function",
 	})
@@ -150,15 +150,15 @@ func (w *wrapServingV1alpha1FunctionImpl) Create(ctx context.Context, in *v1alph
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+func (w *wrapCoreV1alpha1FunctionImpl) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return w.dyn.Namespace(w.namespace).Delete(ctx, name, opts)
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (w *wrapCoreV1alpha1FunctionImpl) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	return w.dyn.Namespace(w.namespace).DeleteCollection(ctx, opts, listOpts)
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Function, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Function, error) {
 	uo, err := w.dyn.Namespace(w.namespace).Get(ctx, name, opts)
 	if err != nil {
 		return nil, err
@@ -170,7 +170,7 @@ func (w *wrapServingV1alpha1FunctionImpl) Get(ctx context.Context, name string, 
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.FunctionList, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.FunctionList, error) {
 	uo, err := w.dyn.Namespace(w.namespace).List(ctx, opts)
 	if err != nil {
 		return nil, err
@@ -182,7 +182,7 @@ func (w *wrapServingV1alpha1FunctionImpl) List(ctx context.Context, opts v1.List
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Function, err error) {
+func (w *wrapCoreV1alpha1FunctionImpl) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Function, err error) {
 	uo, err := w.dyn.Namespace(w.namespace).Patch(ctx, name, pt, data, opts)
 	if err != nil {
 		return nil, err
@@ -194,9 +194,9 @@ func (w *wrapServingV1alpha1FunctionImpl) Patch(ctx context.Context, name string
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) Update(ctx context.Context, in *v1alpha1.Function, opts v1.UpdateOptions) (*v1alpha1.Function, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) Update(ctx context.Context, in *v1alpha1.Function, opts v1.UpdateOptions) (*v1alpha1.Function, error) {
 	in.SetGroupVersionKind(schema.GroupVersionKind{
-		Group:   "serving.knative.dev",
+		Group:   "core.hyperfunction.dev",
 		Version: "v1alpha1",
 		Kind:    "Function",
 	})
@@ -215,9 +215,9 @@ func (w *wrapServingV1alpha1FunctionImpl) Update(ctx context.Context, in *v1alph
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) UpdateStatus(ctx context.Context, in *v1alpha1.Function, opts v1.UpdateOptions) (*v1alpha1.Function, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) UpdateStatus(ctx context.Context, in *v1alpha1.Function, opts v1.UpdateOptions) (*v1alpha1.Function, error) {
 	in.SetGroupVersionKind(schema.GroupVersionKind{
-		Group:   "serving.knative.dev",
+		Group:   "core.hyperfunction.dev",
 		Version: "v1alpha1",
 		Kind:    "Function",
 	})
@@ -236,6 +236,6 @@ func (w *wrapServingV1alpha1FunctionImpl) UpdateStatus(ctx context.Context, in *
 	return out, nil
 }
 
-func (w *wrapServingV1alpha1FunctionImpl) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+func (w *wrapCoreV1alpha1FunctionImpl) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	return nil, errors.New("NYI: Watch")
 }

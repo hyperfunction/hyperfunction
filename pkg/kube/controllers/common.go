@@ -12,22 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package controllers
 
 import (
-	"log"
-
-	"knative.dev/hack/schema/commands"
-	"knative.dev/hack/schema/registry"
-
-	"github.com/hyperfunction/hyperfunction/pkg/apis/core/v1alpha1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 )
 
-// schema is a tool to dump the schema for Eventing resources.
-func main() {
-	registry.Register(&v1alpha1.Function{})
-
-	if err := commands.New("github.com/hyperfunction/hyperfunction").Execute(); err != nil {
-		log.Fatal("Error during command execution: ", err)
+// IgnoreNotFound returns nil on NotFound errors.
+func IgnoreNotFound(err error) error {
+	if apierrors.IsNotFound(err) {
+		return nil
 	}
+	return err
 }

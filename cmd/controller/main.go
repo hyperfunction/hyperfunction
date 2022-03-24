@@ -15,13 +15,16 @@
 package main
 
 import (
+	"knative.dev/pkg/injection"
 	"knative.dev/pkg/injection/sharedmain"
 
 	"github.com/hyperfunction/hyperfunction/pkg/reconciler/function"
 )
 
+var ctors = []injection.ControllerConstructor{
+	function.NewController,
+}
+
 func main() {
-	sharedmain.Main("controller",
-		function.NewController,
-	)
+	sharedmain.Main("controller", ctors...)
 }

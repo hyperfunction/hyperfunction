@@ -12,23 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package v1alpha1
+package main
 
 import (
-	"context"
+	"testing"
 
-	"knative.dev/pkg/apis"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/hyperfunction/hyperfunction/test/ha"
 )
 
-// SetDefaults implements apis.Defaultable
-func (in *Function) SetDefaults(ctx context.Context) {
-	ctx = apis.WithinParent(ctx, in.ObjectMeta)
-	in.Spec.SetDefaults(apis.WithinSpec(ctx))
-}
-
-// SetDefaults implements apis.Defaultable
-func (in *FunctionSpec) SetDefaults(ctx context.Context) {
-	if in.Engine == "" {
-		in.Engine = "knative"
-	}
+func TestNumController(t *testing.T) {
+	assert.Equal(t, ha.NumControllerReconcilers, len(ctors))
 }

@@ -15,20 +15,24 @@
 package v1alpha1
 
 import (
-	"context"
+	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"knative.dev/pkg/apis"
 )
 
-// SetDefaults implements apis.Defaultable
-func (in *Function) SetDefaults(ctx context.Context) {
-	ctx = apis.WithinParent(ctx, in.ObjectMeta)
-	in.Spec.SetDefaults(apis.WithinSpec(ctx))
+func TestFunctionGetConditionSet(t *testing.T) {
+	o := &Function{}
+	assert.Equal(t, apis.ConditionReady, o.GetConditionSet().GetTopLevelConditionType())
 }
 
-// SetDefaults implements apis.Defaultable
-func (in *FunctionSpec) SetDefaults(ctx context.Context) {
-	if in.Engine == "" {
-		in.Engine = "knative"
+func TestFunctionGetGroupVersionKind(t *testing.T) {
+	o := &Function{}
+	want := schema.GroupVersionKind{
+		Group:   "core.hyperfunction.dev",
+		Version: "v1alpha1",
+		Kind:    "Function",
 	}
+	assert.Equal(t, want, o.GetGroupVersionKind())
 }

@@ -30,6 +30,7 @@ type FunctionSpec struct {
 }
 
 type FunctionCode struct {
+	// +optional
 	Inline *string `json:"inline,omitempty"`
 }
 

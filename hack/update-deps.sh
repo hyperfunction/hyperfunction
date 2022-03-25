@@ -18,6 +18,40 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source "$(dirname $0)/../vendor/knative.dev/hack/library.sh"
+REPO_ROOT_DIR=${REPO_ROOT_DIR:-$(git rev-parse --show-toplevel)}
 
-go_update_deps "$@"
+# Run a go tool, installing it first if necessary.
+# Parameters: $1 - tool package/dir for go install.
+#             $2 - tool to run.
+#             $3..$n - parameters passed to the tool.
+function run_go_tool() {
+  local tool=$2
+  if [[ -z "$(which ${tool})" ]]; then
+    go install $1
+  fi
+  shift 2
+  ${tool} "$@"
+}
+
+# Update licenses.
+# Parameters: $1 - output file, relative to repo root dir.
+#             $2...$n - directories and files to inspect.
+function update_licenses() {
+  cd ${REPO_ROOT_DIR} || return 1
+  local dst=$1
+  shift
+
+  run_go_tool github.com/google/go-licenses go-licenses \
+    save ./... --save_path=${dst} --force
+  # Hack to make sure directories retain write permissions after save. This
+  # can happen if the directory being copied is a Go module.
+  # See https://github.com/google/go-licenses/issues/11
+  chmod +w $(find ${dst} -type d)
+}
+
+echo "Prune modules"
+go mod tidy -compat=1.17
+go mod vendor
+
+echo "Updating licenses"
+update_licenses third_party/VENDOR-LICENSE

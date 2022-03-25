@@ -26,5 +26,5 @@ var ctors = []injection.ControllerConstructor{
 }
 
 func main() {
-	sharedmain.Main("controller", ctors...)
+	sharedmain.Main("hyperfunction-controller", ctors...)
 }

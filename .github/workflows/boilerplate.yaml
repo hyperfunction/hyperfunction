@@ -31,14 +31,11 @@ jobs:
       matrix:
         extension:
           - go
-          - sh
 
         # Map between extension and human-readable name.
         include:
           - extension: go
             language: Go
-          - extension: sh
-            language: Bash
 
     steps:
 
